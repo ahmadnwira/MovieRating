@@ -9,7 +9,7 @@ Route::post('/movies', 'MovieController@store');
 Route::get('/movies/show/{movie}', 'MovieController@show');
 
 Route::get('/movies/edit/{movie}', 'MovieController@edit');
-Route::post('/movies/update', 'MovieController@update')->name('update_movie');
+Route::post('/movies/update/{movie}', 'MovieController@update');
 
 Route::get('/movies/delete/{movie}', 'MovieController@destroy')->name('delete_movie');;
 
@@ -37,3 +37,6 @@ Route::get('/register', 'UserController@register')->name('register');
 Route::post('/register', 'UserController@store');
 
 Route::get('/logout', 'UserController@destroy')->name('logout');
+
+/* Admin Routes */
+Route::get('/mange/movies', 'AdminController@movies');

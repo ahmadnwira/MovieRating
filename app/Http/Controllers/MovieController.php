@@ -43,7 +43,7 @@ class MovieController extends Controller
             'title'=>'required|max:140|min:2',
             'director'=>'required|min:4|max:100',
             'description'=>'required',
-            'poster'=>'image|mimes:jpeg,jpg,png|max:2000'
+            'image'=>'required|image|mimes:jpeg,jpg,png|max:2000'
         ]);
 
         $image = $request->all()['image'];
@@ -84,7 +84,7 @@ class MovieController extends Controller
      */
     public function edit(Movie $movie)
     {
-        //
+        return view('movies.edit', ['movie'=>$movie]);
     }
 
     /**
@@ -96,7 +96,37 @@ class MovieController extends Controller
      */
     public function update(Request $request, Movie $movie)
     {
-        //
+        
+        $this->validate(request(),[
+            'title'=>'required|max:140|min:2',
+            'director'=>'required|min:4|max:100',
+            'description'=>'required',
+            'image'=>'required|image|mimes:jpeg,jpg,png|max:2000'
+        ]);
+
+        $to_delte = $movie->image;
+
+        $image = $request->all()['image'];
+
+        $imageName = rand(0,100).time().'.'.$image->getClientOriginalExtension();
+
+        $image->move('img', $imageName);
+        
+        $data = [
+            'user_id'=>auth()->id(),
+            'title'=>request('title'),
+            'description'=>request('description'),
+            'director'=>request('director'),
+            'image'=>'/img/'.$imageName
+        ];
+
+        $movie->update($data);
+        if(file_exists(public_path($to_delte)))
+        {
+            unlink(public_path($to_delte));
+        }
+        return redirect(route('movies'));
+
     }
 
     /**
@@ -106,7 +136,13 @@ class MovieController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Movie $movie)
-    {
-        //
+    {   
+        if(!file_exists(public_path($movie->image)))
+        {
+            return redirect('movies');
+        }
+        unlink(public_path($movie->image));
+        $movie->delete();
+        return redirect(route('movies'));
     }
 }
