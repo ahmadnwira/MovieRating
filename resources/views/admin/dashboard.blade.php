@@ -10,7 +10,6 @@
             
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <a href="mange/users">Users</a>
-                <a href='' class="badge badge-primary">New</a>
             </li>
             
         </ul>

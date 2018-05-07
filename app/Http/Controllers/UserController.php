@@ -35,7 +35,7 @@ class UserController extends Controller
         
     }
 
-    public function destroy()
+    public function logout()
     {
         auth()->logout();
         return(redirect(route('movies')));
@@ -68,5 +68,33 @@ class UserController extends Controller
         auth()->login($user);
 
         return redirect(route('profile'));
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect('/profile');
+    }
+
+    public function edit(User $user)
+    {
+        return view('user.edit', ['user'=>$user]);
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $this->validate($request, [
+            'username'=>'required|min:3|max:100',
+            'email'=>'required|email'
+        ]);
+        
+        $data = [
+            'name' => $request->username,
+            'email'=> $request->email
+        ];
+
+        $user->update($data);
+
+        return redirect('/profile');
     }
 }
