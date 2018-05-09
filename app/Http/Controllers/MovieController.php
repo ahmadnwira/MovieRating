@@ -124,6 +124,7 @@ class MovieController extends Controller
         ];
 
         Rating::create($data);
+        $movie->update(['rating'=>$movie->ratings->avg('rate')]);
         return redirect(route('movies'));
     }
 }
