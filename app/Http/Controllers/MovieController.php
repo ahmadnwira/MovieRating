@@ -49,7 +49,7 @@ class MovieController extends Controller
 
         Movie::create($data);
         
-        return redirect(route('movies'));
+        return redirect(route('index'));
     }
 
     public function show(Movie $movie)
@@ -94,7 +94,7 @@ class MovieController extends Controller
         {
             unlink(public_path($to_delte));
         }
-        return redirect(route('movies'));
+        return redirect(route('index'));
 
     }
 
@@ -102,11 +102,11 @@ class MovieController extends Controller
     {   
         if(!file_exists(public_path($movie->image)))
         {
-            return redirect('movies');
+            return redirect('index');
         }
         unlink(public_path($movie->image));
         $movie->delete();
-        return redirect(route('movies'));
+        return redirect(route('index'));
     }
 
     public function rate(Movie $movie, Request $request)
@@ -116,15 +116,22 @@ class MovieController extends Controller
             'review' => 'max:140'
         ]);
 
+        $user_review = $movie->ratings->where('user_id', '=', $request->user()->id);
+        
+        if(count($user_review) !== 0)
+        {
+            return back()->withErrors(['You already reviewed this movie before']);
+        }
+
         $data = [
             'user_id' => $request->user()->id,
             'review' => $request->get('review') ?? '' ,
             'rate' => $request->get('rate'),
             'movie_id' =>  $movie->id
         ];
-
+        
         Rating::create($data);
         $movie->update(['rating'=>$movie->ratings->avg('rate')]);
-        return redirect(route('movies'));
+        return back();
     }
 }

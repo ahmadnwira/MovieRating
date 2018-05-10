@@ -1,6 +1,5 @@
 <form method="POST" action="/movies/rate/{{$movie->id}}">
         @csrf
-
         <div class="form-group m-1">
             <label for="rate">write a short review: </label>
             <input type="text" class="form-control" placeholder="what a great movie" name="review">

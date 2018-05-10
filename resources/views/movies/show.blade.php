@@ -25,13 +25,12 @@
                 @if(!empty($rating->review))
                     <div class="card mb-1 p-1">
                         <p class="card-text">
-                            review: {{$rating->review}}
+                            {{$rating->review}}
                             <span class="badge badge-pill badge-primary"> {{$rating->rate}} </span> 
                         </p>
                     </div>        
                 @endif
             @endforeach
-
         </div>
     </div>
 @endsection

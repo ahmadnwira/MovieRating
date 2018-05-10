@@ -13,42 +13,12 @@ class UserController extends Controller
         $this->middleware('guest', ['only' => ['login', 'register']]);
     }
 
-    public function profile()
-    {
-        return view('user.profile');
-    }
-
-    public function login()
-    {
-        return view('user.login');
-    }
-
-    public function signin()
-    {
-
-        if(auth()->attempt(request(['email', 'password'])))
-        {
-            return view('user.profile');
-        }
-
-        return back();
-        
-    }
-
-    public function logout()
-    {
-        auth()->logout();
-        return(redirect(route('movies')));
-    }
-
-    public function register()
+    public function create()
     {
         return view('user.register');
     }
 
-    /* 
-    *  creates and signin user
-    */
+
     public function store()
     {
         $this->validate(request(),[
@@ -73,7 +43,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect('/profile');
+        return redirect(route('profile'));
     }
 
     public function edit(User $user)
@@ -95,6 +65,12 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect('/profile');
+        return redirect(route('profile'));
+    }
+
+    public function profile()
+    {   
+        $reviews = User::find(auth()->id())->ratings;
+        return view('user.profile', ['reviews'=>$reviews]);
     }
 }
