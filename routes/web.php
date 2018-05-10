@@ -15,6 +15,7 @@ Route::get('/movies/delete/{movie}', 'MovieController@destroy')->name('delete_mo
 
 Route::post('/movies/rate/{movie}', 'MovieController@rate')->name('rate');
 
+Route::get('/movies/search/', 'MovieController@search')->name('search');
 
 /* user_routes */
 Route::get('/register', 'UserController@create')->name('register');

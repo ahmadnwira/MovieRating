@@ -12,4 +12,10 @@ class Movie extends Model
     {
         return $this->hasMany('App\Rating');
     }
+
+    public function search($query)
+    {
+        return $this->whereRaw("MATCH(title, description, director) AGAINST(? IN BOOLEAN MODE)",  $query);
+
+    }
 }

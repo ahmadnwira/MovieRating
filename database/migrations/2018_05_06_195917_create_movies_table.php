@@ -23,6 +23,8 @@ class CreateMoviesTable extends Migration
             $table->integer('rating')->default(0);
             $table->timestamps();
         });
+
+        DB::statement('ALTER TABLE movies ADD FULLTEXT INDEX IndexName (title, description, director)');
     }
 
     /**

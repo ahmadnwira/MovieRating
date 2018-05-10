@@ -134,4 +134,15 @@ class MovieController extends Controller
         $movie->update(['rating'=>$movie->ratings->avg('rate')]);
         return back();
     }
+
+    public function search(Request $request)
+    {
+        $this->validate($request, ['query'=>'required|min:4']);
+        
+        $movie = new Movie();
+
+        $res = $movie->search($request->all()['query']) ;
+
+        return view('movies.search', ['movies'=>$res->get()]);
+    }
 }
